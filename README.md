@@ -6,10 +6,24 @@ L’obiettivo è indovinare/anticipare un tempo estratto casualmente da 1 a 100 
 ---
 
 ## 🚀 Tecnologie usate
-- **JavaScript (ES6+)**
-- **npm** per la gestione dei pacchetti
-- **HTML/CSS** per l’interfaccia frontend
-- (opzionale) Frameworks/librerie aggiuntive installabili via npm
+- **Frontend:** React + HTML/CSS
+- **Backend:** JavaScript (Node.js)
+- **npm** per gestione dipendenze
+- **Vite** come ambiente di sviluppo frontend
+
+---
+
+## 📁 Struttura del progetto
+gioco-tempo/
+├── backend/ # Logica del gioco (Node.js)
+│ └── script.js
+├── frontend/ # Interfaccia utente (React)
+│ ├── package.json
+│ ├── vite.config.js
+│ └── src/
+│ ├── App.jsx
+│ └── main.jsx
+└── README.md
 
 ---
 
