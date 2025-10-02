@@ -1,0 +1,11 @@
+# Dipendenze
+node_modules/
+
+# Output di build
+dist/
+build/
+
+# Config locali
+.env
+.DS_Store
+.vscode/
