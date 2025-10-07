@@ -1,0 +1,246 @@
+Primo Script:
+
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gioco della Birra</title>
+    <style>
+        body {
+            background-color: #000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        canvas {
+            border: 2px solid white;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="gameCanvas" width="800" height="600"></canvas>
+    <script src="gioco.js"></script>
+</body>
+</html>
+
+Secondo Script:
+const canvas = document.getElementById('gameCanvas');
+const ctx = canvas.getContext('2d');
+
+// Impostazioni della pinta
+let pinta = {
+    x: 100,
+    y: 450,
+    width: 80,
+    height: 120,
+    livelloBirra: 1.0, // 1.0 = pieno, 0.0 = vuoto
+    velocita: 2,
+    direzione: 1 // 1 per destra, -1 per sinistra
+};
+
+// Impostazioni del rubinetto
+const rubinetto = {
+    x: canvas.width - 150,
+    y: 100,
+    width: 60,
+    height: 100
+};
+
+let staRiempendo = false;
+
+Terzo Script:
+
+function disegnaPinta() {
+    ctx.strokeStyle = 'white';
+    ctx.lineWidth = 4;
+    ctx.strokeRect(pinta.x, pinta.y, pinta.width, pinta.height);
+
+    // Disegna la birra dentro la pinta
+    if (pinta.livelloBirra > 0) {
+        ctx.fillStyle = 'white';
+        const altezzaBirra = pinta.height * pinta.livelloBirra;
+        ctx.fillRect(
+            pinta.x, 
+            pinta.y + (pinta.height - altezzaBirra), 
+            pinta.width, 
+            altezzaBirra
+        );
+    }
+}
+
+function disegnaRubinetto() {
+    ctx.fillStyle = 'white';
+    // Corpo del rubinetto
+    ctx.fillRect(rubinetto.x, rubinetto.y, rubinetto.width, rubinetto.height);
+    // Beccuccio
+    ctx.fillRect(rubinetto.x - 20, rubinetto.y + rubinetto.height, 20, 20);
+
+    // Cascata di birra (solo se la pinta è sotto e si sta riempiendo)
+    if (staRiempendo) {
+        ctx.fillRect(rubinetto.x - 15, rubinetto.y + rubinetto.height + 20, 10, pinta.y - (rubinetto.y + rubinetto.height + 20));
+    }
+}
+
+Quarto Script:
+
+function aggiorna() {
+    // Svuota la pinta mentre si muove
+    if (!staRiempendo && pinta.livelloBirra > 0) {
+        pinta.livelloBirra -= 0.002;
+    }
+    
+    // Movimento della pinta
+    pinta.x += pinta.velocita * pinta.direzione;
+
+    // Inverti la direzione se tocca i bordi
+    if (pinta.x + pinta.width > canvas.width || pinta.x < 0) {
+        pinta.direzione *= -1;
+    }
+
+    // Controlla se la pinta è sotto il rubinetto
+    const sottoRubinetto = pinta.x < rubinetto.x && pinta.x + pinta.width > rubinetto.x;
+    
+    if (sottoRubinetto && pinta.livelloBirra <= 0.1) {
+        pinta.livelloBirra = 0; // Svuota completamente prima di riempire
+        staRiempendo = true;
+    }
+
+    // Riempimento della pinta
+    if (staRiempendo) {
+        pinta.livelloBirra += 0.01;
+        if (pinta.livelloBirra >= 1.0) {
+            pinta.livelloBirra = 1.0;
+            staRiempendo = false;
+        }
+    }
+}
+
+function disegna() {
+    // Pulisci il canvas (sfondo nero)
+    ctx.fillStyle = 'black';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    disegnaRubinetto();
+    disegnaPinta();
+}
+
+function gameLoop() {
+    aggiorna();
+    disegna();
+    requestAnimationFrame(gameLoop);
+}
+
+// Avvia il gioco!
+gameLoop();
+
+Quinto Script:
+
+const canvas = document.getElementById('gameCanvas');
+const ctx = canvas.getContext('2d');
+
+// Impostazioni della pinta
+let pinta = {
+    x: 100,
+    y: 450,
+    width: 80,
+    height: 120,
+    livelloBirra: 1.0, // 1.0 = pieno, 0.0 = vuoto
+    velocita: 2,
+    direzione: 1 // 1 per destra, -1 per sinistra
+};
+
+// Impostazioni del rubinetto
+const rubinetto = {
+    x: canvas.width - 150,
+    y: 100,
+    width: 60,
+    height: 100
+};
+
+let staRiempendo = false;
+
+function disegnaPinta() {
+    ctx.strokeStyle = 'white';
+    ctx.lineWidth = 4;
+    ctx.strokeRect(pinta.x, pinta.y, pinta.width, pinta.height);
+
+    // Disegna la birra dentro la pinta
+    if (pinta.livelloBirra > 0) {
+        ctx.fillStyle = 'white';
+        const altezzaBirra = pinta.height * pinta.livelloBirra;
+        ctx.fillRect(
+            pinta.x, 
+            pinta.y + (pinta.height - altezzaBirra), 
+            pinta.width, 
+            altezzaBirra
+        );
+    }
+}
+
+function disegnaRubinetto() {
+    ctx.fillStyle = 'white';
+    // Corpo del rubinetto
+    ctx.fillRect(rubinetto.x, rubinetto.y, rubinetto.width, rubinetto.height);
+    // Beccuccio
+    ctx.fillRect(rubinetto.x - 20, rubinetto.y + rubinetto.height, 20, 20);
+
+    // Cascata di birra (solo se la pinta è sotto e si sta riempiendo)
+    if (staRiempendo) {
+        ctx.fillRect(rubinetto.x - 15, rubinetto.y + rubinetto.height + 20, 10, pinta.y - (rubinetto.y + rubinetto.height + 20));
+    }
+}
+
+function aggiorna() {
+    // Svuota la pinta mentre si muove
+    if (!staRiempendo && pinta.livelloBirra > 0) {
+        pinta.livelloBirra -= 0.002;
+        if(pinta.livelloBirra < 0) pinta.livelloBirra = 0;
+    }
+    
+    // Movimento della pinta (solo se non si sta riempiendo)
+    if (!staRiempendo) {
+        pinta.x += pinta.velocita * pinta.direzione;
+    }
+
+    // Inverti la direzione se tocca i bordi
+    if (pinta.x + pinta.width > canvas.width || pinta.x < 0) {
+        pinta.direzione *= -1;
+    }
+
+    // Controlla se la pinta è sotto il rubinetto e quasi vuota
+    const sottoRubinetto = pinta.x > rubinetto.x - pinta.width/2 && pinta.x < rubinetto.x + rubinetto.width - pinta.width/2;
+    
+    if (sottoRubinetto && pinta.livelloBirra <= 0.01 && !staRiempendo) {
+        staRiempendo = true;
+    }
+
+    // Riempimento della pinta
+    if (staRiempendo) {
+        pinta.livelloBirra += 0.01;
+        if (pinta.livelloBirra >= 1.0) {
+            pinta.livelloBirra = 1.0;
+            staRiempendo = false;
+        }
+    }
+}
+
+function disegna() {
+    // Pulisci il canvas (sfondo nero)
+    ctx.fillStyle = 'black';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    disegnaRubinetto();
+    disegnaPinta();
+}
+
+function gameLoop() {
+    aggiorna();
+    disegna();
+    requestAnimationFrame(gameLoop);
+}
+
+// Avvia il gioco!
+gameLoop();
